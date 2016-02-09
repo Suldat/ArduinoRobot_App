@@ -14,7 +14,7 @@ import com.jmedeisis.bugstick.JoystickListener;
 
 public class MainActivity extends AppCompatActivity {
 
-    boolean istBlau = false;
+    boolean nimmtAuf = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
