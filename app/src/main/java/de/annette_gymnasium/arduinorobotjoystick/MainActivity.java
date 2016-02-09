@@ -11,6 +11,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.bluetooth.*;
+import android.widget.Toast;
 
 import com.jmedeisis.bugstick.Joystick;
 import com.jmedeisis.bugstick.JoystickListener;
@@ -18,7 +20,7 @@ import com.jmedeisis.bugstick.JoystickListener;
 public class MainActivity extends AppCompatActivity {
 
     boolean nimmtAuf = false;
-    BluetoothAdapter BTAdapter = BluetoothAdapter.getDefaultAdapter();
+    BluetoothAdapter bluetooth = BluetoothAdapter.getDefaultAdapter();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,8 +34,9 @@ public class MainActivity extends AppCompatActivity {
         final Button buttonStick = (Button) findViewById(R.id.buttonStick);
         final GradientDrawable bgShape = (GradientDrawable) buttonStick.getBackground().getCurrent();
 
+        String status = "";
 
-        if(BTAdapter == null) {
+        if(bluetooth == null) {
             new AlertDialog.Builder(this).setTitle("Nicht kompatibel")
                     .setMessage("Dein Handy unterstützt kein Bluetooth")
                     .setPositiveButton("Exit", new DialogInterface.OnClickListener() {
@@ -43,8 +46,17 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }).setIcon(android.R.drawable.ic_dialog_alert)
                     .show();
+        } else {
+            if(bluetooth.isEnabled()) {
+                String myDeviceAdress = bluetooth.getAddress();
+                String myDeviceName = bluetooth.getName();
+                status = myDeviceName + " : " +myDeviceAdress;
+            } else {
+                status = "Bluetooth ist nicht eingeschaltet";
+            }
         }
 
+        Toast.makeText(this, status, Toast.LENGTH_LONG).show();
 
         //der Listener vom Joystick
         joystick.setJoystickListener(new JoystickListener() {
