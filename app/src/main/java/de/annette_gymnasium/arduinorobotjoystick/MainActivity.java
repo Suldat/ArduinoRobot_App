@@ -1,5 +1,8 @@
 package de.annette_gymnasium.arduinorobotjoystick;
 
+import android.app.AlertDialog;
+import android.bluetooth.BluetoothAdapter;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Handler;
@@ -15,6 +18,7 @@ import com.jmedeisis.bugstick.JoystickListener;
 public class MainActivity extends AppCompatActivity {
 
     boolean nimmtAuf = false;
+    BluetoothAdapter BTAdapter = BluetoothAdapter.getDefaultAdapter();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +32,18 @@ public class MainActivity extends AppCompatActivity {
         final Button buttonStick = (Button) findViewById(R.id.buttonStick);
         final GradientDrawable bgShape = (GradientDrawable) buttonStick.getBackground().getCurrent();
 
+
+        if(BTAdapter == null) {
+            new AlertDialog.Builder(this).setTitle("Nicht kompatibel")
+                    .setMessage("Dein Handy unterstützt kein Bluetooth")
+                    .setPositiveButton("Exit", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                           System.exit(0);
+                        }
+                    }).setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+        }
 
 
         //der Listener vom Joystick
